@@ -1,0 +1,39 @@
+name: Release - Reusable
+on:
+  push:
+    tags:
+      - "*"
+    inputs:
+      project_name:
+        required: true
+        type: string
+      npm_install:
+        required: true
+        type: boolean
+    secrets:
+      vault_token:
+        required: true
+jobs:
+  CI_Steps:
+    runs_on: [self-hosted]
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Import Vault Secrets
+        id: vault-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: https://vault.devopsjourney.fun:8200
+          token: ${{secrets.vault_token}}
+          tlsSkipVerify: true
+          secrets: |
+            common/data/common sonarqube_user | sonarqube_user
+            common/data/common sonarqube_password | sonarqube_password
+
+      - name: Install NodeJS modules
+        run: npm install
+        if: {{inputs.npm_install}}
+
+      - name: Release Software
+        run: echo OK

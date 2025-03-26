@@ -7,6 +7,8 @@ on:
       project_name:
         required: true
         type: string
+      release_archive_file:
+        required: true
       npm_install:
         required: true
         type: boolean
@@ -20,20 +22,35 @@ jobs:
       - name: Code Checkout
         uses: actions/checkout@v4
 
+      - name: Install NodeJS modules
+        run: npm install
+        if: {{inputs.npm_install}}
+
+
       - name: Import Vault Secrets
         id: vault-secrets
         uses: hashicorp/vault-action@v2
         with:
           url: https://vault.devopsjourney.fun:8200
-          token: ${{secrets.vault_token}}
+          token: ${{secrets.vault_token}} # We have manually attached vault_token in github actions
           tlsSkipVerify: true
           secrets: |
-            common/data/common sonarqube_user | sonarqube_user
-            common/data/common sonarqube_password | sonarqube_password
+            common/data/common artifactory_user | artifactory_user
+            common/data/common artifactory_password | artifactory_password
 
-      - name: Install NodeJS modules
-        run: npm install
-        if: {{inputs.npm_install}}
+      - name: Create a version file
+        run: echo ${GITHUB_REF_NAME} > VERSION
+
+      - name: Prepare Artifact
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: ${{ inputs.release_archive_file }}
+          dest: artifact.zip
+
+      - name: Upload Artifact
+        run: curl -f -v --user ${{steps.vault-secrets.outputs.artifactory_user}}:${{steps.vault-secrets.outputs.artifactory_password}} --data-binary@artifact.zip -X PUT "http://artifactory-internal.devopsjourney.fun:8081/artifactory/expense-backend/${GITHUB_REF_NAME}.zip"
 
       - name: Release Software
         run: echo OK
+
+#       if: ${{ startsWith(github.ref, 'refs/tags/')}}

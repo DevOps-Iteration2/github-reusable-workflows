@@ -23,7 +23,7 @@ jobs:
 
       - name: Install NodeJS modules
         run: npm install
-        if: {{inputs.npm_install}}
+        if: $ {{inputs.npm_install}}
 
       - name: Import Vault Secrets
         id: vault-secrets

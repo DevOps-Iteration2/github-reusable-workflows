@@ -26,7 +26,6 @@ jobs:
         run: npm install
         if: {{inputs.npm_install}}
 
-
       - name: Import Vault Secrets
         id: vault-secrets
         uses: hashicorp/vault-action@v2
@@ -42,7 +41,7 @@ jobs:
         run: echo ${GITHUB_REF_NAME} > VERSION
 
       - name: Prepare Artifact
-        run: zip -r artifact.zip ${{inputs.project_name}}
+        run: zip -r artifact.zip ${{inputs.release_archive_files}}
 
       - name: Upload Artifact
         run: curl -f -v --user ${{steps.vault-secrets.outputs.artifactory_user}}:${{steps.vault-secrets.outputs.artifactory_password}} --data-binary@artifact.zip -X PUT "http://artifactory-internal.devopsjourney.fun:8081/artifactory/${{inputs.project_name}}/${GITHUB_REF_NAME}.zip"

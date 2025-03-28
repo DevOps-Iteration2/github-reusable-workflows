@@ -7,6 +7,7 @@ on:
         type: string
       release_archive_file:
         required: true
+        type: string
       npm_install:
         required: true
         type: boolean
@@ -15,7 +16,7 @@ on:
         required: true
 jobs:
   CI_Steps:
-    runs_on: [self-hosted]
+    runs-on: [self-hosted]
     steps:
       - name: Code Checkout
         uses: actions/checkout@v4

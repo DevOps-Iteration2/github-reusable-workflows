@@ -16,7 +16,8 @@ on:
         required: true
 jobs:
   CI_Steps:
-    runs-on: [self-hosted, Linux]
+    runs-on:
+      - self-hosted
     steps:
       - name: Code Checkout
         uses: actions/checkout@v4

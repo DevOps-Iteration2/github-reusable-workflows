@@ -35,6 +35,9 @@ jobs:
           secrets: |
             common/data/common artifactory_user | artifactory_user;
             common/data/common artifactory_password | artifactory_password;
+          method: token
+          exportEnv: true
+          ignoreNotFound: false
 
       - name: Create a version file
         run: echo ${GITHUB_REF_NAME} > VERSION

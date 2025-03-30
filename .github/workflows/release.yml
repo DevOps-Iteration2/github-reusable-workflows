@@ -11,9 +11,9 @@ on:
       npm_install:
         required: true
         type: boolean
-    secrets:
-      vault_token:
-        required: true
+#    secrets:
+#      vault_token:
+#        required: true
 jobs:
   CI_Steps:
     runs-on: [self-hosted]

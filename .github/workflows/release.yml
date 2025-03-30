@@ -46,7 +46,7 @@ jobs:
         run: zip -r artifact.zip ${{inputs.release_archive_file}}
 
       - name: Upload Artifact
-        run: curl -f -v --user ${{steps.vault-secrets.outputs.artifactory_user}}:${{steps.vault-secrets.outputs.artifactory_password}} --data-binary@artifact.zip -X PUT "http://artifactory-internal.devopsjourney.fun:8081/artifactory/${{inputs.project_name}}/${GITHUB_REF_NAME}.zip"
+        run: curl -f -v --user ${{steps.vault-secrets.outputs.artifactory_user}}:${{steps.vault-secrets.outputs.artifactory_password}} --data-binary @artifact.zip -X PUT "http://artifactory-internal.devopsjourney.fun:8081/artifactory/${{inputs.project_name}}/${GITHUB_REF_NAME}.zip"
 
       - run: |
          echo '{

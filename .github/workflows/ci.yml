@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted]
     steps:
       - name: Code Checkout
-        uses: actions/checkout@v4
+        uses: DevOps-Iteration2/actions/checkout@v4
 
       - name: Import Vault Secrets
         id: vault-secrets

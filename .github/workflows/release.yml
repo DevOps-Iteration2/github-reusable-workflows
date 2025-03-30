@@ -33,8 +33,8 @@ jobs:
           token: ${{secrets.vault_token}} # We have manually attached vault_token in github actions
           tlsSkipVerify: true
           secrets: |
-            common/data/common artifactory_user | artifactory_user
-            common/data/common artifactory_password | artifactory_password
+            common/data/common artifactory_user | artifactory_user;
+            common/data/common artifactory_password | artifactory_password;
 
       - name: Create a version file
         run: echo ${GITHUB_REF_NAME} > VERSION
